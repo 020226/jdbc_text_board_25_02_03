@@ -1,11 +1,15 @@
 package com.ex.jdbc.board;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
   public static void main(String[] args) {
     System.out.println("== 자바 텍스트 게시판 시작 ==");
     int lastArticleId = 0;
+    List<Article> articles = new ArrayList<>();
+
     Scanner sc = new Scanner(System.in);
     while(true) {
       System.out.print("명령) ");
@@ -27,8 +31,23 @@ public class Main {
         int id = ++lastArticleId;
         Article article = new Article(id, subject, content);
         System.out.println("생성 된 게시물 객체 : " + article);
+        articles.add(article);
+
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
       }
+      else if(cmd.equals("/usr/article/list")) {
+        if(articles.isEmpty()) {
+          System.out.println("게시물이 존재하지 않습니다.");
+          continue;
+        }
+        System.out.println("== 게시물 리스트 ==");
+        System.out.println("== 번호 | 제목 ==");
+        for(int i = 0; i < articles.size(); i++) {
+          Article article = articles.get(i);
+          System.out.printf(" %d | %s\n", article.id, article.subject);
+        }
+      }
+
       else if(cmd.equals("exit")) {
         System.out.println("== 게시판을 종료합니다. ==");
         break; // 이 시점에서 반복문을 빠져나옴
