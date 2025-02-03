@@ -25,7 +25,9 @@ public class Main {
           continue;
         }
         int id = ++lastArticleId;
-        System.out.printf("%d번 게시물이 등록되었습니다.\n", id);
+        Article article = new Article(id, subject, content);
+        System.out.println("생성 된 게시물 객체 : " + article);
+        System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
       }
       else if(cmd.equals("exit")) {
         System.out.println("== 게시판을 종료합니다. ==");
@@ -36,5 +38,22 @@ public class Main {
       }
     }
     sc.close(); // 메모리 반납
+  }
+}
+
+class Article {
+  int id;
+  String subject;
+  String content;
+  // 생성자 메서드 : 객체가 생성 될 때 딱 한번 실행!
+  Article(int id, String subject, String content) {
+    this.id = id;
+    this.subject = subject;
+    this.content = content;
+  }
+  // 메서드 오버라이딩
+  @Override
+  public String toString() {
+    return "{id : %d, subject : \"%s\", content: \"%s\"}".formatted(id, subject, content);
   }
 }
