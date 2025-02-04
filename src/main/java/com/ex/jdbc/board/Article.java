@@ -1,11 +1,11 @@
 package com.ex.jdbc.board;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Article {
   int id;
-  LocalDate regDate;
-  LocalDate updateDate;
+  LocalDateTime regDate;
+  LocalDateTime updateDate;
   String subject;
   String content;
   // 생성자 메서드 : 객체가 생성 될 때 딱 한번 실행!
@@ -14,8 +14,7 @@ public class Article {
     this.subject = subject;
     this.content = content;
   }
-  public Article(int id, LocalDate regDate, LocalDate updateDate, String subject, String content) {
-    this.id = id;
+  public Article(int id, LocalDateTime regDate, LocalDateTime updateDate, String subject, String content) {    this.id = id;
     this.regDate = regDate;
     this.updateDate = updateDate;
     this.subject = subject;

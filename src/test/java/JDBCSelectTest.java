@@ -1,7 +1,7 @@
 import com.ex.jdbc.board.Article;
 
 import java.sql.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +32,8 @@ public class JDBCSelectTest {
       // rs.next() : 다음장으로 넘긴다.
       while (rs.next()) {
         int id = rs.getInt("id");
-        LocalDate regDate = rs.getDate("regDate").toLocalDate();
-        LocalDate updateDate = rs.getDate("updateDate").toLocalDate();
-        String subject = rs.getString("subject");
+        LocalDateTime regDate = rs.getTimestamp("regDate").toLocalDateTime();
+        LocalDateTime updateDate = rs.getTimestamp("updateDate").toLocalDateTime();String subject = rs.getString("subject");
         String content = rs.getString("content");
         Article article = new Article(id, regDate, updateDate, subject, content);
         articles.add(article);
