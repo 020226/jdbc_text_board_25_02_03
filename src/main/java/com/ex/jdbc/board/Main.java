@@ -1,10 +1,18 @@
 package com.ex.jdbc.board;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+  private static final String URL = "jdbc:mysql://localhost:3306/text_board?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull"; // 데이터베이스 URL
+  private static final String USER = "root"; // 사용자명
+  private static final String PASSWORD = ""; // 비밀번호
+
   public static void main(String[] args) {
     System.out.println("== 자바 텍스트 게시판 시작 ==");
     int lastArticleId = 0;
@@ -30,10 +38,42 @@ public class Main {
         }
         int id = ++lastArticleId;
         Article article = new Article(id, subject, content);
-        System.out.println("생성 된 게시물 객체 : " + article);
-        articles.add(article);
 
-        System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
+        Connection conn = null;
+        PreparedStatement pstat = null;
+        try {
+          // JDBC 드라이버 로드
+          Class.forName("com.mysql.cj.jdbc.Driver");
+          // 데이터베이스 연결
+          conn = DriverManager.getConnection(URL, USER, PASSWORD);
+          System.out.println("데이터베이스에 성공적으로 연결되었습니다.");
+          // SQL 삽입 쿼리
+          String sql = "INSERT INTO article";
+          sql += " SET regDate = NOW()";
+          sql += ", updateDate = NOW()";
+          sql += ", `subject` = \"%s\"".formatted(subject);
+          sql += ", content = \"%s\";".formatted(content);
+          System.out.println(sql);
+          pstat = conn.prepareStatement(sql);
+          int affectedRows = pstat.executeUpdate();
+          System.out.println("affectedRows : " + affectedRows);
+          System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
+        } catch (ClassNotFoundException e) {
+          System.out.println("JDBC 드라이버를 찾을 수 없습니다.");
+          e.printStackTrace();
+        } catch (SQLException e) {
+          System.out.println("데이터베이스 작업 중 오류가 발생했습니다.");
+          e.printStackTrace();
+        } finally {
+          // 자원 해제
+          try {
+            if (pstat != null && !pstat.isClosed()) pstat.close();
+            if (conn != null && !conn.isClosed()) conn.close();
+            System.out.println("데이터베이스 연결이 닫혔습니다.");
+          } catch (SQLException e) {
+            e.printStackTrace();
+          }
+        }
       }
       else if(cmd.equals("/usr/article/list")) {
         if(articles.isEmpty()) {
@@ -57,22 +97,5 @@ public class Main {
       }
     }
     sc.close(); // 메모리 반납
-  }
-}
-
-class Article {
-  int id;
-  String subject;
-  String content;
-  // 생성자 메서드 : 객체가 생성 될 때 딱 한번 실행!
-  Article(int id, String subject, String content) {
-    this.id = id;
-    this.subject = subject;
-    this.content = content;
-  }
-  // 메서드 오버라이딩
-  @Override
-  public String toString() {
-    return "{id : %d, subject : \"%s\", content: \"%s\"}".formatted(id, subject, content);
   }
 }
