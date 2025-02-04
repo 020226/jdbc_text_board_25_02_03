@@ -1,4 +1,4 @@
-package com.ex.jdbc.board;
+package com.ex.jdbc.board.util;
 
 import java.util.HashMap;
 import java.util.Map;

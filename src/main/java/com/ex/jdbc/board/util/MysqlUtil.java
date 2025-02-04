@@ -1,4 +1,4 @@
-package com.ex.jdbc.board;
+package com.ex.jdbc.board.util;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,5 +1,7 @@
 package com.ex.jdbc.board;
 
+import com.ex.jdbc.board.util.Util;
+
 import java.util.Map;
 
 public class Rq {
